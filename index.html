@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        canvas#myCanvas {
+            background-image: linear-gradient(135deg, lightGreen, green);
+            border: 3px solid gray;
+            border-radius: 2em;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="600">Your browser does not support JS Canvas</canvas>
+    <button onclick="playGame()" type="button">Play Game</button>
+
+    <script>
+        const canvas = document.getElementById("myCanvas");
+let ctx = canvas.getContext("2d");
+
+const CW = canvas.width;
+const CH = canvas.height;
+const halfCW = CW / 2;
+const halfCH = CH / 2;
+
+let ballIconSrc = "https://cdn-icons-png.flaticon.com/512/53/53283.png";
+let ballImg = new Image();
+ballImg.crossOrigin = "anonymous";
+ballImg.src = ballIconSrc;
+
+let ballX = halfCW;
+let ballY = halfCH;
+let ballW = 30;
+let ballH = 30;
+
+let paddleX = halfCW - 25;
+let paddleY = CH - 100;
+let paddleW = 50;
+let paddleH = 20;
+
+let paddleTwoX = halfCW - 25;
+let paddleTwoY = halfCH - 200;
+let paddleTwoW = 50;
+let paddleTwoH = 20;
+
+function drawRect(x, y, w, h) {
+  ctx.fillRect(x, y, w, h);
+}
+function drawBall() {
+  //drawRect(ballX - 15, ballY, ballW, ballH);
+  ctx.drawImage(ballImg, ballX - 15, ballY - 15, ballW, ballH);
+}
+drawBall();
+function drawPaddle() {
+  drawRect(paddleX, paddleY, paddleW, paddleH);
+}
+drawPaddle();
+function drawPaddleTwo() {
+  drawRect(paddleTwoX, paddleTwoY, paddleTwoW, paddleTwoH);
+}
+drawPaddleTwo();
+
+let netX = CW / 2 - 60;
+let netY = CH / 2 - 300;
+let netW = 120;
+let netH = 30;
+function drawNet() {
+  drawRect(netX, netY, netW, netH);
+}
+drawNet();
+
+let netTwoX = CW / 2 - 60;
+let netTwoY = CH / 2 + 270;
+let netTwoW = 120;
+let netTwoH = 30;
+function drawNetTwo() {
+  drawRect(netTwoX, netTwoY, netTwoW, netTwoH);
+}
+drawNetTwo();
+
+let ballSpeedX = 5;
+let ballSpeedY = 5;
+
+function paddleCollision() {
+  if (
+    ballX < paddleX + paddleW &&
+    ballX + ballW > paddleX &&
+    ballY < paddleY + paddleH &&
+    ballY + ballH > paddleY
+  ) {
+    return true;
+  }
+}
+
+function netCollision() {
+  if (
+    ballX < netX + netW &&
+    ballX + ballW > netX &&
+    ballY < netY + netH &&
+    ballY + ballH > netY
+  ) {
+    return true;
+  }
+}
+
+function paddleCollisionTwo() {
+  if (
+    ballX < paddleTwoX + paddleTwoW &&
+    ballX + ballW > paddleTwoX &&
+    ballY < paddleTwoY + paddleTwoH &&
+    ballY + ballH > paddleTwoY
+  ) {
+    return true;
+  }
+}
+
+function netCollisionTwo() {
+  if (
+    ballX < netTwoX + netTwoW &&
+    ballX + ballW > netTwoX &&
+    ballY < netTwoY + netTwoH &&
+    ballY + ballH > netTwoY
+  ) {
+    return true;
+  }
+}
+//event listener
+let moveRight = false;
+let moveLeft = false;
+let moveUp = false;
+let moveDown = false;
+document.addEventListener("keydown", function (event) {
+  if (event.key === "ArrowRight") {
+    //paddleX += 10;
+    moveRight = true;
+  }
+  if (event.key === "ArrowLeft") {
+    //paddleX -= 10;
+    moveLeft = true;
+  }
+});
+document.addEventListener("keyup", function (event) {
+  if (event.key === "ArrowRight") {
+    //paddleX += 10;
+    moveRight = false;
+  }
+  if (event.key === "ArrowLeft") {
+    //paddleX -= 10;
+    moveLeft = false;
+  }
+});
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "ArrowUp") {
+    //paddleX += 10;
+    moveUp = true;
+  }
+  if (event.key === "ArrowDown") {
+    //paddleX -= 10;
+    moveDown = true;
+  }
+});
+document.addEventListener("keyup", function (event) {
+  if (event.key === "ArrowUp") {
+    //paddleX += 10;
+    moveUp = false;
+  }
+  if (event.key === "ArrowDown") {
+    //paddleX -= 10;
+    moveDown = false;
+  }
+});
+
+//event listener 2
+let moveRightTwo = false;
+let moveLeftTwo = false;
+let moveUpTwo = false;
+let moveDownTwo = false;
+document.addEventListener("keydown", function (event) {
+  if (event.key === "d") {
+    //paddleX += 10;
+    moveRightTwo = true;
+  }
+  if (event.key === "a") {
+    //paddleX -= 10;
+    moveLeftTwo = true;
+  }
+});
+document.addEventListener("keyup", function (event) {
+  if (event.key === "d") {
+    //paddleX += 10;
+    moveRightTwo = false;
+  }
+  if (event.key === "a") {
+    //paddleX -= 10;
+    moveLeftTwo = false;
+  }
+});
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "w") {
+    //paddleX += 10;
+    moveUpTwo = true;
+  }
+  if (event.key === "s") {
+    //paddleX -= 10;
+    moveDownTwo = true;
+  }
+});
+document.addEventListener("keyup", function (event) {
+  if (event.key === "w") {
+    //paddleX += 10;
+    moveUpTwo = false;
+  }
+  if (event.key === "s") {
+    //paddleX -= 10;
+    moveDownTwo = false;
+  }
+});
+
+//let bounces = 0;
+//let falls = 0;
+let scores = 0;
+let scoresTwo = 0;
+
+function drawHUD() {
+  ctx.font = "12px Arial";
+  //ctx.fillText("Bounces: " + bounces, 50, 50);
+  //ctx.fillText("Falls: " + falls, 50, 100);
+  ctx.fillText("Home: " + scores, 150, 20);
+  ctx.fillText("Away: " + scoresTwo, 150, 590);
+}
+drawHUD();
+
+function playGame() {
+  ballX += ballSpeedX;
+  ballY += ballSpeedY;
+  ctx.clearRect(0, 0, CW, CH);
+  if (ballX + ballW > CW || ballX < 0) {
+    ballSpeedX *= -1;
+  }
+  if (ballY + ballH > CH || ballY < 0) {
+    ballSpeedY *= -1;
+  }
+  /*if (ballY + ballH > CH) {
+    falls++;
+  }*/
+
+  if (paddleCollision()) {
+    console.log("collision");
+    ballSpeedY *= -1;
+    //bounces++;
+  }
+
+  if (netCollision()) {
+    ballSpeedY *= -1;
+    ballSpeedX *= -1;
+    scoresTwo++;
+  }
+
+  if (paddleCollisionTwo()) {
+    console.log("collision");
+    ballSpeedY *= -1;
+    //bounces++;
+  }
+
+  if (netCollisionTwo()) {
+    ballSpeedY *= -1;
+    ballSpeedX *= -1;
+    scores++;
+  }
+
+  if (moveRight == true && paddleX + paddleW < CW) {
+    paddleX += 10;
+  }
+  if (moveLeft == true && paddleX > 0) {
+    paddleX -= 10;
+  }
+  if (moveUp == true && paddleY > 0) {
+    paddleY -= 5;
+  }
+  if (moveDown == true && paddleY + paddleH < CH) {
+    paddleY += 5;
+  }
+  //--------
+  if (moveRightTwo == true && paddleTwoX + paddleTwoW < CW) {
+    paddleTwoX += 10;
+  }
+  if (moveLeftTwo == true && paddleTwoX > 0) {
+    paddleTwoX -= 10;
+  }
+  if (moveUpTwo == true && paddleTwoY > 0) {
+    paddleTwoY -= 5;
+  }
+  if (moveDownTwo == true && paddleTwoY + paddleTwoH < CH) {
+    paddleTwoY += 5;
+  }
+
+  drawBall();
+  drawPaddle();
+  drawPaddleTwo();
+  drawHUD();
+  drawNet();
+  drawNetTwo();
+  requestAnimationFrame(playGame);
+}
+
+    </script>
+</body>
+</html>
